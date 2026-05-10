@@ -20,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AuthUser authUser = authUserRepository.findByUsername(username)
+        AuthUser authUser = authUserRepository.findByPhoneNumber(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
         if (!authUser.getActive()) {
@@ -28,14 +28,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         return new User(
-                authUser.getUsername(),
+                authUser.getPhoneNumber(),
                 authUser.getPassword(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + authUser.getRole().name()))
         );
     }
 
     public UserDetails loadUserByUsernameAndTenant(String username, Long tenantId) {
-        AuthUser authUser = authUserRepository.findByUsernameAndTenantId(username, tenantId)
+        AuthUser authUser = authUserRepository.findByPhoneNumberAndTenantId(username, tenantId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username + " for tenant: " + tenantId));
 
         if (!authUser.getActive()) {
@@ -43,7 +43,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         return new User(
-                authUser.getUsername(),
+                authUser.getPhoneNumber(),
                 authUser.getPassword(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + authUser.getRole().name()))
         );

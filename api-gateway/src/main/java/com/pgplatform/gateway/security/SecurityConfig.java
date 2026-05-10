@@ -17,7 +17,8 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .pathMatchers("/actuator/**").permitAll()
+                        .pathMatchers("/actuator/**", "/create/details/**").permitAll()
+
                         /*
                          * Authentication is enforced by a Spring Cloud Gateway GlobalFilter.
                          * Keep this chain permissive to avoid double-auth at the gateway layer.

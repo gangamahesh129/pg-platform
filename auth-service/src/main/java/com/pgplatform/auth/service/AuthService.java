@@ -23,10 +23,10 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public LoginResponse login(LoginRequest request) {
-        String username = request.getUsername();
+        String phonenumber = request.getPhonenumber();
         String password = request.getPassword();
 
-        AuthUser authUser = authUserRepository.findByUsername(username)
+        AuthUser authUser = authUserRepository.findByPhoneNumber(phonenumber)
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
         if (request.getTenantId() != null && !authUser.getTenantId().equals(request.getTenantId())) {
@@ -34,7 +34,7 @@ public class AuthService {
         }
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
+                new UsernamePasswordAuthenticationToken(phonenumber, password)
         );
 
         String token = jwtUtil.generateToken(
@@ -54,8 +54,8 @@ public class AuthService {
                 .build();
     }
 
-    public AuthUser register(RegisterRequest request) {
-        if (authUserRepository.existsByUsernameAndTenantId(request.getPassword(), request.getTenantId())) {
+    public AuthUser  register(RegisterRequest request) {
+        if (authUserRepository.existsByPhoneNumberAndTenantId(request.getPassword(), request.getTenantId())) {
             throw new RuntimeException("Username already exists for this tenant");
         }
 

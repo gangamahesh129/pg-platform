@@ -3,6 +3,8 @@ package com.pgplatform.hostel.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "hostel")
 @Data
@@ -16,19 +18,19 @@ public class Hostel {
     private Long id;
 
     @Column(nullable = false)
-    private Long tenantId;
+    private String tenantId;
 
     @Column(nullable = false)
-    private Long ownerId; // auth_user_id of owner
+    private String hostelName;
 
-    @Column(nullable = false)
-    private String name;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private HostelAddress hostelAddress;
 
-    private String street;
-    private String city;
-    private String state;
-    private Integer pinCode;
 
-    private String contactPhone;
-    private String contactEmail;
+    @OneToMany(mappedBy = "hostel",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<HostelPermission> permissions;
+
 }

@@ -5,20 +5,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class HostelDto {
-
     private Long id;
-    private Long tenantId;
-    private Long ownerId;
-    private String name;
-    private String street;
-    private String city;
-    private String state;
-    private Integer pinCode;
-    private String contactPhone;
-    private String contactEmail;
+    private String tenantId;
+    private String hostelName;
+    private HostelAddressDto hostelAddress;
+    private List<HostelPermissionDto> permissions;
+
+    public  enum HostelRole {
+        OE_ADMIN, OE_PUBLIC
+    }
 }

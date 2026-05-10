@@ -45,7 +45,7 @@ eureka:
 
 jwt:
   # Must match auth-service HS256 secret (ideally set via env var JWT_SECRET)
-  secret: ${JWT_SECRET:pgplatform-secret-key-must-be-at-least-256-bits-for-hs256}
+  secret: ${JWT_SECRET:XJ6M0mF6f4i3vYx8h9Q2zL7kN5sR1cW3uT8pAaBbCcDdEeFfGgHhIiJjKkLlMm==}
   # Endpoints that should NOT require Authorization header
   public-paths:
     - /api/auth/**

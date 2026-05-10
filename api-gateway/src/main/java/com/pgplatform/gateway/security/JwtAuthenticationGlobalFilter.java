@@ -3,6 +3,7 @@ package com.pgplatform.gateway.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -26,7 +27,8 @@ public class JwtAuthenticationGlobalFilter implements GlobalFilter, Ordered {
     private final JwtProperties properties;
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
-    public JwtAuthenticationGlobalFilter(JwtUtil jwtUtil, JwtProperties properties) {
+
+    public JwtAuthenticationGlobalFilter(@Autowired JwtUtil jwtUtil, @Autowired JwtProperties properties) {
         this.jwtUtil = Objects.requireNonNull(jwtUtil, "jwtUtil");
         this.properties = Objects.requireNonNull(properties, "properties");
     }

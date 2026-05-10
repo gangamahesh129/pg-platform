@@ -15,12 +15,11 @@ import java.util.Objects;
 
 @Component
 public class JwtUtil {
-    private final JwtProperties properties;
     private final SecretKey signingKey;
 
     public JwtUtil(JwtProperties properties) {
-        this.properties = Objects.requireNonNull(properties, "properties");
-        this.signingKey = buildSigningKey(properties.getSecret());
+        JwtProperties properties1 = Objects.requireNonNull(properties, "properties");
+        this.signingKey = buildSigningKey(properties1.getSecret());
     }
 
     /**

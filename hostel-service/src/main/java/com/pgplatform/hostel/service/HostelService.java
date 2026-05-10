@@ -3,13 +3,17 @@ package com.pgplatform.hostel.service;
 import com.pgplatform.hostel.dto.HostelDto;
 import com.pgplatform.hostel.dto.RoomDto;
 import com.pgplatform.hostel.entity.Hostel;
+
 import com.pgplatform.hostel.entity.Room;
+import com.pgplatform.hostel.repository.HostelPermissionRepositary;
 import com.pgplatform.hostel.repository.HostelRepository;
 import com.pgplatform.hostel.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,21 +22,32 @@ public class HostelService {
 
     private final HostelRepository hostelRepository;
     private final RoomRepository roomRepository;
+    private final HostelPermissionRepositary hostelPermissionRepositary;
 
     public HostelDto createHostel(HostelDto dto) {
-        Hostel hostel = Hostel.builder()
-                .tenantId(dto.getTenantId())
-                .ownerId(dto.getOwnerId())
-                .name(dto.getName())
-                .street(dto.getStreet())
-                .city(dto.getCity())
-                .state(dto.getState())
-                .pinCode(dto.getPinCode())
-                .contactPhone(dto.getContactPhone())
-                .contactEmail(dto.getContactEmail())
-                .build();
+
+        dto.setTenantId(getTeantId());
+        dto.getPermissions().forEach(hostelPermission -> {
+            hostelPermission.setTeantId(getTeantId());
+        });
+        Hostel hostel = new Hostel();
+        BeanUtils.copyProperties(dto, hostel);
+
+        hostel.setTenantId(getTeantId());
+        hostel.getPermissions().forEach(hostelPermission -> {
+            hostelPermission.setTeantId(getTeantId());
+        });
+
         hostel = hostelRepository.save(hostel);
+
+        dto.setId(hostel.getId());
+        dto.getHostelAddress().setId(hostel.getHostelAddress().getId());
+
         return toHostelDto(hostel);
+    }
+
+    private static String getTeantId() {
+        return "HSTL" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
     public HostelDto getHostel(Long id) {
@@ -41,14 +56,14 @@ public class HostelService {
         return toHostelDto(hostel);
     }
 
-    public List<HostelDto> getHostelsByTenant(Long tenantId) {
+    public List<HostelDto> getHostelsByTenant(String tenantId) {
         return hostelRepository.findByTenantId(tenantId).stream()
                 .map(this::toHostelDto)
                 .collect(Collectors.toList());
     }
 
     public List<HostelDto> getHostelsByOwner(Long ownerId) {
-        return hostelRepository.findByOwnerId(ownerId).stream()
+        return hostelPermissionRepositary.findByOwnerId(ownerId).stream()
                 .map(this::toHostelDto)
                 .collect(Collectors.toList());
     }
@@ -85,18 +100,11 @@ public class HostelService {
     }
 
     private HostelDto toHostelDto(Hostel h) {
-        return HostelDto.builder()
-                .id(h.getId())
-                .tenantId(h.getTenantId())
-                .ownerId(h.getOwnerId())
-                .name(h.getName())
-                .street(h.getStreet())
-                .city(h.getCity())
-                .state(h.getState())
-                .pinCode(h.getPinCode())
-                .contactPhone(h.getContactPhone())
-                .contactEmail(h.getContactEmail())
-                .build();
+
+        HostelDto dto = new HostelDto();
+        BeanUtils.copyProperties(h, dto);
+
+        return dto;
     }
 
     private RoomDto toRoomDto(Room r) {

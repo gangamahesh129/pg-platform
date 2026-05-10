@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface AuthUserRepository extends JpaRepository<AuthUser, Long> {
 
-    Optional<AuthUser> findByUsername(String username);
+    Optional<AuthUser> findByPhoneNumber(String phoneNumber);
 
-    Optional<AuthUser> findByUsernameAndTenantId(String username, Long tenantId);
+    Optional<AuthUser> findByPhoneNumberAndTenantId(String phoneNumber, Long tenantId);
 
-    boolean existsByUsername(String username);
+    //boolean existsByUsername(String username);
 
-    boolean existsByUsernameAndTenantId(String username, Long tenantId);
+    boolean existsByPhoneNumberAndTenantId(String phoneNumber, Long tenantId);
 }

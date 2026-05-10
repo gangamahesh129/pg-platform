@@ -7,9 +7,8 @@ import java.util.List;
 
 public interface HostelRepository extends JpaRepository<Hostel, Long> {
 
-    List<Hostel> findByTenantId(Long tenantId);
+    List<Hostel> findByTenantId(String tenantId);
 
-    List<Hostel> findByOwnerId(Long ownerId);
 
-    List<Hostel> findByTenantIdAndOwnerId(Long tenantId, Long ownerId);
+    //List<Hostel> findByTenantIdAndOwnerId(String tenantId, Long ownerId);
 }

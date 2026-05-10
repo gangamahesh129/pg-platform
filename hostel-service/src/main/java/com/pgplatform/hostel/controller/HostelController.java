@@ -16,7 +16,7 @@ public class HostelController {
 
     private final HostelService hostelService;
 
-    @PostMapping
+    @PostMapping("/create/details")
     public ResponseEntity<HostelDto> createHostel(@RequestBody HostelDto dto) {
         return ResponseEntity.ok(hostelService.createHostel(dto));
     }
@@ -27,7 +27,7 @@ public class HostelController {
     }
 
     @GetMapping("/tenant/{tenantId}")
-    public ResponseEntity<List<HostelDto>> getHostelsByTenant(@PathVariable Long tenantId) {
+    public ResponseEntity<List<HostelDto>> getHostelsByTenant(@PathVariable String tenantId) {
         return ResponseEntity.ok(hostelService.getHostelsByTenant(tenantId));
     }
 
